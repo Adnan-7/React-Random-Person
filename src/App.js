@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FaEnvelopeOpen,
   FaUser,
@@ -10,10 +10,63 @@ import {
 const url = 'https://randomuser.me/api/';
 const defaultImage = 'https://randomuser.me/api/portraits/men/75.jpg';
 function App() {
+  const [title, setTitle] = useState('name');
+  const [value, setValue] = useState('random person');
+
+  const handleValue = (e) => {
+    console.log(e.target);
+  };
   return (
-    <div>
-      <h3>Random person starter</h3>
-    </div>
+    <main>
+      <div className='block bcg-black'></div>
+      <div className='block'>
+        <div className='container'>
+          <img src={defaultImage} alt='random user' className='user-img' />
+          <p className='user-title'>my {title} is </p>
+          <p className='user-value'>{value}</p>
+          <div className='values-list'>
+            <button className='icon' data-label='name' onMouseOut={handleValue}>
+              <FaUser />
+            </button>
+
+            <button
+              className='icon'
+              data-label='email'
+              onMouseOut={handleValue}>
+              <FaEnvelopeOpen />
+            </button>
+
+            <button className='icon' data-label='age' onMouseOut={handleValue}>
+              <FaCalendarTimes />
+            </button>
+
+            <button
+              className='icon'
+              data-label='street'
+              onMouseOut={handleValue}>
+              <FaMap />
+            </button>
+
+            <button
+              className='icon'
+              data-label='phone'
+              onMouseOut={handleValue}>
+              <FaPhone />
+            </button>
+
+            <button
+              className='icon'
+              data-label='password'
+              onMouseOut={handleValue}>
+              <FaLock />
+            </button>
+          </div>
+          <button className='btn' type='button'>
+            random user
+          </button>
+        </div>
+      </div>
+    </main>
   );
 }
 
