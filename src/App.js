@@ -51,7 +51,14 @@ function App() {
     }
   );
 
-  const handleValue = (e) => {};
+  const handleValue = (e) => {
+    if (e.target.classList.contains('icon')) {
+      const newValue = e.target.dataset.label;
+
+      setTitle(newValue);
+      setValue(data[newValue]);
+    }
+  };
   return (
     <main>
       <div className='block bcg-black'></div>
