@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 import {
   FaEnvelopeOpen,
   FaUser,
@@ -13,15 +15,53 @@ function App() {
   const [title, setTitle] = useState('name');
   const [value, setValue] = useState('random person');
 
-  const handleValue = (e) => {
-    console.log(e.target);
+  const getPerson = async () => {
+    const { data } = await axios.get('https://randomuser.me/api/');
+    const person = data.results[0];
+    const { email, phone } = person;
+    const { large: image } = person.picture;
+    const {
+      login: { password },
+    } = person;
+    const { first, last } = person.name;
+    const { age } = person.dob;
+    const {
+      street: { number, name },
+    } = person.location;
+
+    const newPerson = {
+      phone,
+      email,
+      image,
+      password,
+      age,
+      street: `${number} ${name}`,
+      name: `${first} ${last}`,
+    };
+    setTitle('name');
+    setValue(newPerson.name);
+    return newPerson;
   };
+
+  const { data, isLoading, isError, error, refetch } = useQuery(
+    'random-person',
+    getPerson,
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  const handleValue = (e) => {};
   return (
     <main>
       <div className='block bcg-black'></div>
       <div className='block'>
         <div className='container'>
-          <img src={defaultImage} alt='random user' className='user-img' />
+          <img
+            src={(data && data.image) || defaultImage}
+            alt='random user'
+            className='user-img'
+          />
           <p className='user-title'>my {title} is </p>
           <p className='user-value'>{value}</p>
           <div className='values-list'>
@@ -61,8 +101,8 @@ function App() {
               <FaLock />
             </button>
           </div>
-          <button className='btn' type='button'>
-            random user
+          <button className='btn' type='button' onClick={refetch}>
+            {isLoading ? 'Loading...' : 'Random User'}
           </button>
         </div>
       </div>
